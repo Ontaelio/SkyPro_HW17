@@ -2,6 +2,8 @@ import requests
 
 # fixtures
 
+# Only directors * task is tested here, genres were done via Postman as I'm too lazy I guess
+
 DIRECTOR_POST_DATA = {
     "name": "Вася Внедренный"
 }
@@ -18,7 +20,7 @@ DIRECTOR_DELETE_UID = 21
 
 
 class Directors:
-    URL = 'http://127.0.0.1:5000/directors'
+    URL = 'http://127.0.0.1:5000/directors/'
 
     @staticmethod
     def post():
@@ -31,25 +33,25 @@ class Directors:
 
     @staticmethod
     def put(uid: int):
-        response = requests.put(f'{Directors.URL}/{str(uid)}/', json=DIRECTOR_PUT_DATA)
+        response = requests.put(f'{Directors.URL}{str(uid)}/', json=DIRECTOR_PUT_DATA)
         print(response)
         if response.status_code == 204:
-            return response.json()
+            return ''
         else:
             return response.text
 
     @staticmethod
     def delete(uid: int):
-        response = requests.delete(f'{Directors.URL}/{str(uid)}/')
+        response = requests.delete(f'{Directors.URL}{str(uid)}/')
         print(response)
         if response.status_code == 204:
-            return response.json()
+            return ''
         else:
             return response.text
 
     @staticmethod
     def get_one(uid: int):
-        response = requests.get(f'{Directors.URL}/{str(uid)}/')
+        response = requests.get(f'{Directors.URL}{str(uid)}/')
         print(response)
         if response.status_code == 200:
             return response.json()
@@ -71,6 +73,7 @@ def test_directors():
 
     print(Directors.post())
     b = Directors.get_one(DIRECTOR_PUT_UID)
+    print(b)
     if b['name'] == DIRECTOR_POST_DATA['name']:
         print('Post single director: Ok!\n')
     else:
@@ -78,10 +81,12 @@ def test_directors():
         exit()
 
     print(Directors.put(DIRECTOR_PUT_UID))
+    b = Directors.get_one(DIRECTOR_PUT_UID)
+    print(b)
     if b['name'] == DIRECTOR_PUT_DATA['name']:
-        print('Post single director: Ok!\n')
+        print('Put single director: Ok!\n')
     else:
-        print('Post single director: ERROR!')
+        print('Put single director: ERROR!')
         exit()
 
     print(Directors.delete(DIRECTOR_DELETE_UID))

@@ -10,6 +10,8 @@ director_schema = DirectorSchema()
 directors_schema = DirectorSchema(many=True)
 
 
+# This is the * task
+
 @directors_ns.route('/')
 class DirectorAdd(Resource):
 
@@ -22,7 +24,7 @@ class DirectorAdd(Resource):
         print(data)
         director = Director(
             name=data.get("name"),
-            )
+        )
         db.session.add(director)
         db.session.commit()
         return "", 201
